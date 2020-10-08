@@ -37,9 +37,8 @@ All availabe under packet manager ( ubuntu and debian tested)
 ___Program Flow_______________________________________________________________________
 
 nohup:
-    Üblicherweise nutzt man nohup, um Dienste im Hintergrund zu starten und diese so von der Login-Shell zu trennen. 
-    Ausgaben des aufgerufenen Programms werden automatisch in die Datei nohup.out geleitet, die im Verzeichnis angelegt wird, von dem aus der Befehl ausgeführt wurde. 
-    Um zu verhindern, dass das Programm nicht weiterläuft, weil es auf Eingaben wartet, ist es außerdem manchmal notwendig, auch die Standard-Eingabe etwa mit >/dev/null umzulenken.
+    nohup, um Dienste im Hintergrund zu starten von der Login-Shell zu trennen.    
+    Um Blockadezu vermeiden, weil Programm auf Eingaben wartet die Standard-Eingabe mit >/dev/null umzulenken.
 
 ___Start Internet Radio_____________________________________________________________
 
