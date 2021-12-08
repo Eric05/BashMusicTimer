@@ -38,7 +38,7 @@ ___Program Flow_________________________________________________________________
 
 nohup:
     nohup, um Dienste im Hintergrund zu starten von der Login-Shell zu trennen.    
-    Um Blockadezu vermeiden, weil Programm auf Eingaben wartet die Standard-Eingabe mit >/dev/null umzulenken.
+    Um Blockade zu vermeiden, weil Programm auf Eingaben wartet die Standard-Eingabe mit >/dev/null umzulenken.
 
 ___Start Internet Radio_____________________________________________________________
 
