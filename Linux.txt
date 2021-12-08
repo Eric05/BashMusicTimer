@@ -1,0 +1,9 @@
+shell;bash -c
+checkBattery,upower -i $(upower -e | grep 'BAT') | grep -E "percentage" | grep -o -E '[0-9]+'
+connectBluetooth,bluetoothctl <<<"connect $macAddress"
+mediaOn,vlc
+mediaOff,pkill vlc
+screenOn,xset dpms force on
+screenOff,xset dpms force off
+shutdown,shutdown -c
+acoustic,aplay /usr/share/sounds/linuxmint-gdm.wav

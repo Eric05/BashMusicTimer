@@ -1,0 +1,9 @@
+shell;cmd /c start /b
+battery,WMIC PATH Win32_Battery Get EstimatedChargeRemaining
+connectBluetooth,
+mediaOn,vlc.exe
+mediaOff,taskkill /F /IM vlc.exe
+screenOn,taskkill /F /IM scrnsave.scr
+screenOff,%systemroot%/system32/scrnsave.scr /s
+shutdown,shutdown /S /F
+acoustic,powershell -c (New-Object Media.SoundPlayer "C:\Windows\Media\notify.wav").PlaySync();

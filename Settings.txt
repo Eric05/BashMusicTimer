@@ -1,0 +1,11 @@
+timer;4
+root;C:\Music
+increment;2
+warning;2
+warnReps;2
+screenOffDelay;5
+browser;firefox
+batteryLimit;15
+mode;list
+bluetooth;
+playlist;C:\Music\Test
