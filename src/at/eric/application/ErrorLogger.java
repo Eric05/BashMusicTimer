@@ -9,18 +9,6 @@ import java.time.format.DateTimeFormatter;
 public class ErrorLogger {
 
     private final static String PATH = "Log.txt";
-    private static ErrorLogger instance;
-
-    private ErrorLogger() {
-
-    }
-
-    public static ErrorLogger getInstance() {
-        if (instance == null) {
-            instance = new ErrorLogger();
-        }
-        return instance;
-    }
 
     public static void writeError(String text) {
         FileWriter fw = null;
@@ -32,7 +20,7 @@ public class ErrorLogger {
             bw.write(getFormattedDate() + " " + text);
             bw.newLine();
             bw.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         } finally {
             if (fw != null) {
