@@ -1,7 +1,6 @@
 package at.eric.application;
 
 import java.util.List;
-import java.util.Locale;
 
 public class Storage {
 
@@ -13,7 +12,8 @@ public class Storage {
                 try {
                     val = s.split("[,|;]")[1].trim();
                 } catch (Exception ignored) {
-                    ErrorLogger.writeError("Error when splitting " + key.toUpperCase(Locale.ROOT));
+                    return val;
+                    //ErrorLogger.writeError("Error when splitting " + key.toUpperCase(Locale.ROOT));
                 }
             }
         }

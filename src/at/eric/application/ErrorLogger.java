@@ -1,8 +1,10 @@
 package at.eric.application;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,11 +12,16 @@ public class ErrorLogger {
 
     private final static String PATH = "Log.txt";
 
+    public ErrorLogger() {
+
+    }
+
     public static void writeError(String text) {
         FileWriter fw = null;
 
         try {
-            fw = new FileWriter(PATH, true);
+            String userDirectory = Paths.get("").toAbsolutePath().toString();
+            fw = new FileWriter(userDirectory + File.separator + PATH, true);
             BufferedWriter bw = new BufferedWriter(fw);
 
             bw.write(getFormattedDate() + " " + text);

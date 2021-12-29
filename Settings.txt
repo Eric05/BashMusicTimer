@@ -1,4 +1,4 @@
-timer;4
+timer;5
 root;C:\Music
 increment;2
 warning;2

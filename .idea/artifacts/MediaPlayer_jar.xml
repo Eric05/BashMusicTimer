@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MediaPlayer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MediaPlayer_jar</output-path>
+    <root id="archive" name="MediaPlayer.jar">
+      <element id="module-output" name="MediaPlayer" />
+    </root>
+  </artifact>
+</component>

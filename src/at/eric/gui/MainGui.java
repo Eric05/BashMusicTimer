@@ -27,6 +27,7 @@ public class MainGui extends JFrame {
     private int increment;
     private int warning;
     private boolean isScreenOff;
+    private int delay = 1;
 
     public MainGui() {
         super("Music Player");
@@ -39,8 +40,13 @@ public class MainGui extends JFrame {
             connectBluetooth();
         }
 
+
+        if (!Storage.getValueByKey("delay", commands).isBlank()){
+            delay = Integer.parseInt(Storage.getValueByKey("delay", commands));
+        }
+
         Thread t1 = new Thread(() -> {
-            Sleep.delaySeconds(1);
+            Sleep.delaySeconds(delay);
             createGui();
             init();
             timer();
@@ -142,10 +148,10 @@ public class MainGui extends JFrame {
         Thread t = new Thread(this::setMode);
         Thread t2 = new Thread(this::screenOff);
         OsCommands.doCommand("mediaOff", "");
-        Sleep.delaySeconds(1);
+        Sleep.delaySeconds(delay);
         init();
         t.start();
-        Sleep.delaySeconds(1);
+        Sleep.delaySeconds(delay);
         this.toFront();
         this.requestFocus();
         t2.start();
@@ -260,7 +266,7 @@ public class MainGui extends JFrame {
         if (fd != null) {
             setPlaylist(String.valueOf(fd));
             OsCommands.doCommand("mediaOff", "");
-            Sleep.delaySeconds(1);
+            Sleep.delaySeconds(delay);
             OsCommands.doCommand("mediaOn", playlist);
         }
     }

@@ -7,3 +7,4 @@ screenOn,xset dpms force on
 screenOff,xset dpms force off
 shutdown,shutdown -c
 acoustic,aplay /usr/share/sounds/linuxmint-gdm.wav
+delay;1
