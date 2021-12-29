@@ -10,16 +10,22 @@ import java.util.List;
 
 public class FileOperation {
     private final String path;
-    private final String userDirectory = Paths.get("").toAbsolutePath().toString();
+    private static final String currentWorkingDir = System.getProperty("user.dir");
 
     public FileOperation(String path) {
         this.path = path;
     }
 
+
+    public static String getCurrentWorkingDir(){
+        return currentWorkingDir;
+    }
+
+
     public List<String> getSettings() {
         List<String> settings = new ArrayList<>();
         try {
-            settings = Files.readAllLines(Path.of(userDirectory + File.separator + path));
+            settings = Files.readAllLines(Path.of(currentWorkingDir + File.separator + path));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,7 +34,7 @@ public class FileOperation {
 
     public void writeSettings(List<String> settings) {
         try {
-            Files.write(Path.of(userDirectory + File.separator + path), settings);
+            Files.write(Path.of(currentWorkingDir + File.separator + path), settings);
         } catch (IOException e) {
             e.printStackTrace();
         }

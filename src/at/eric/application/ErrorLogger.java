@@ -20,8 +20,8 @@ public class ErrorLogger {
         FileWriter fw = null;
 
         try {
-            String userDirectory = Paths.get("").toAbsolutePath().toString();
-            fw = new FileWriter(userDirectory + File.separator + PATH, true);
+            String currentWorkingDir = FileOperation.getCurrentWorkingDir();
+            fw = new FileWriter(currentWorkingDir + File.separator + PATH, true);
             BufferedWriter bw = new BufferedWriter(fw);
 
             bw.write(getFormattedDate() + " " + text);
