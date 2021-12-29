@@ -2,22 +2,33 @@ package at.eric.application;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileOperation {
+    private static String currentWorkingDir;
     private final String path;
-    private static final String currentWorkingDir = System.getProperty("user.dir");
 
     public FileOperation(String path) {
         this.path = path;
     }
 
 
-    public static String getCurrentWorkingDir(){
+    public static String getCurrentWorkingDir() {
+        if (currentWorkingDir == null) {
+            try {
+                final var pathToJar = Path.of(FileOperation.class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation().toURI());
+                currentWorkingDir = pathToJar.getParent().toAbsolutePath().toString();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
         return currentWorkingDir;
     }
 
@@ -25,7 +36,7 @@ public class FileOperation {
     public List<String> getSettings() {
         List<String> settings = new ArrayList<>();
         try {
-            settings = Files.readAllLines(Path.of(currentWorkingDir + File.separator + path));
+            settings = Files.readAllLines(Path.of(getCurrentWorkingDir() + File.separator + path));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,7 +45,7 @@ public class FileOperation {
 
     public void writeSettings(List<String> settings) {
         try {
-            Files.write(Path.of(currentWorkingDir + File.separator + path), settings);
+            Files.write(Path.of(getCurrentWorkingDir() + File.separator + path), settings);
         } catch (IOException e) {
             e.printStackTrace();
         }
