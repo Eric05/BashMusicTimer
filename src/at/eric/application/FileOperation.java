@@ -30,8 +30,9 @@ public class FileOperation {
             }
         }
         return currentWorkingDir;
+        //return System.getProperty("user.dir");
     }
-
+//TODO uncomment for production
 
     public List<String> getSettings() {
         List<String> settings = new ArrayList<>();

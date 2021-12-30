@@ -1,5 +1,7 @@
 # BashMusicTimer
-The bash Version of Music Timer
+bash and java Swing Application
+
+ Fotosize: (640 x 360);
 
 ___Start Command in Ubuntu__________________________________________________________
 

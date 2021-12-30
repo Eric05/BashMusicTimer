@@ -7,8 +7,7 @@ import java.io.InputStreamReader;
 public class GetCmdValue {
 
    public static int getValue(String command){
-
-        ProcessBuilder pb = new ProcessBuilder(  "cmd.exe", "/c",command);
+       ProcessBuilder pb = new ProcessBuilder(  "cmd.exe", "/c",command);
         pb.redirectErrorStream(true);
         Process p = null;
         try {

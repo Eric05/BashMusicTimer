@@ -26,7 +26,7 @@ public class MainGui extends JFrame {
     private String root;
     private int increment;
     private int warning;
-    private boolean isScreenOff;
+    private boolean isScreenOff = false;
     private int delay = 1;
 
     public MainGui() {
@@ -59,7 +59,8 @@ public class MainGui extends JFrame {
     }
 
     public void createGui() {
-        var pathToPicture = new File("mic.jpg");
+        String currentWorkingDir = FileOperation.getCurrentWorkingDir();
+        var pathToPicture = new File(currentWorkingDir + File.separator + "mic.jpg");
         if (pathToPicture.exists()) {
             try {
                 final Image backgroundImage = javax.imageio.ImageIO.read(pathToPicture);
@@ -169,7 +170,6 @@ public class MainGui extends JFrame {
         setIncrement(increment);
         root = Storage.getValueByKey("root", settings);
         warning = parseInt(Storage.getValueByKey("warning", settings));
-        isScreenOff = false;
     }
 
     private void connectBluetooth() {
@@ -237,7 +237,6 @@ public class MainGui extends JFrame {
 
     private void screenOn() {
         if (isScreenOff) {
-            isScreenOff = false;
             Thread t = new Thread(() -> OsCommands.doCommand("screenOn", ""));
             t.start();
         }
@@ -257,17 +256,21 @@ public class MainGui extends JFrame {
     }
 
     public void increaseTimer(ActionEvent e) {
+        Thread t = new Thread(this::screenOff);
         int actualTime = parseInt(tf_timer.getText());
         setTime(actualTime + increment);
+        t.start();
     }
 
     public void changePlaylist(ActionEvent e) {
         var fd = new FileDialog().getFileName(root);
         if (fd != null) {
+            Thread t = new Thread(this::screenOff);
             setPlaylist(String.valueOf(fd));
             OsCommands.doCommand("mediaOff", "");
             Sleep.delaySeconds(delay);
             OsCommands.doCommand("mediaOn", playlist);
+            t.start();
         }
     }
 
