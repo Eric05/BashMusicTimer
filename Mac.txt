@@ -1,6 +1,6 @@
 shell;bash -c
-checkBattery,upower -i $(upower -e | grep 'BAT') | grep -E "percentage" | grep -o -E '[0-9]+'
-connectBluetooth,bluetoothctl <<<"connect $macAddress"
+battery,upower -i $(upower -e | grep 'BAT') | grep -E 'percentage' | grep -o -E '[0-9]+'
+bluetooth,bluetoothctl <<<"connect $macAddress"
 mediaOn,vlc
 mediaOff,pkill vlc
 screenOn,xset dpms force on

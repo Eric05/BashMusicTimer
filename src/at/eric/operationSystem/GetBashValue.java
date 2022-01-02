@@ -1,14 +1,12 @@
 package at.eric.operationSystem;
 
 import at.eric.application.ErrorLogger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class GetBashValue {
     public static int getValue(String command){
-
         ProcessBuilder pb = new ProcessBuilder(  "bash", "-c",command);
         pb.redirectErrorStream(true);
         Process p = null;
@@ -39,4 +37,5 @@ public class GetBashValue {
         return Integer.parseInt(numberOnly);
 
     }
+
 }

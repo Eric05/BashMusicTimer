@@ -1,11 +1,11 @@
 package at.eric.operationSystem;
 
+import at.eric.application.ErrorLogger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class GetCmdValue {
-
    public static int getValue(String command){
        ProcessBuilder pb = new ProcessBuilder(  "cmd.exe", "/c",command);
         pb.redirectErrorStream(true);
@@ -14,6 +14,8 @@ public class GetCmdValue {
             p = pb.start();
         } catch (IOException e) {
             e.printStackTrace();
+            ErrorLogger.writeError("Error when getting Battery Status in Bash/Cmd");
+            return 100;
         }
        BufferedReader stdin = null;
        if (p != null) {
@@ -31,8 +33,8 @@ public class GetCmdValue {
             commandOutput.append(line);
         }
 
-       String numberOnly= String.valueOf(commandOutput).replaceAll("[^0-9]", "");
-       return Integer.parseInt(numberOnly);
+        String numberOnly= String.valueOf(commandOutput).replaceAll("[^0-9]", "");
+        return Integer.parseInt(numberOnly);
 
     }
 

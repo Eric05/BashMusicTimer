@@ -40,8 +40,7 @@ public class MainGui extends JFrame {
             connectBluetooth();
         }
 
-
-        if (!Storage.getValueByKey("delay", commands).isBlank()){
+        if (!Storage.getValueByKey("delay", commands).isBlank()) {
             delay = Integer.parseInt(Storage.getValueByKey("delay", commands));
         }
 
@@ -174,7 +173,7 @@ public class MainGui extends JFrame {
 
     private void connectBluetooth() {
         if (!Storage.getValueByKey("bluetooth", settings).isEmpty()) {
-            OsCommands.doCommand("bluetooth", Storage.getValueByKey("bluetooth", settings));
+            OsCommands.doCommand("bluetooth", "");
         }
     }
 
@@ -182,8 +181,8 @@ public class MainGui extends JFrame {
         if (!Storage.getValueByKey("batteryLimit", settings).isEmpty()) {
             int actual = OsCommands.getBatteryStatus();
             if (actual < Integer.parseInt(Storage.getValueByKey("batteryLimit", settings))) {
-                acoustic(1);
-                showMessageDialog(null, "Battery: " + actual);
+                acoustic(2);
+                showMessageDialog(null, "Low Battery: " + actual);
             }
         }
     }
@@ -262,6 +261,13 @@ public class MainGui extends JFrame {
         t.start();
     }
 
+    public void increaseTimer() {
+        Thread t = new Thread(this::screenOff);
+        int actualTime = parseInt(tf_timer.getText());
+        setTime(actualTime + increment);
+        t.start();
+    }
+
     public void changePlaylist(ActionEvent e) {
         var fd = new FileDialog().getFileName(root);
         if (fd != null) {
@@ -294,7 +300,8 @@ public class MainGui extends JFrame {
     public void warning() {
         screenOn();
         acoustic(parseInt(Storage.getValueByKey("warnReps", settings)));
-        showMessageDialog(null, "Sleep in " + warning + " minutes");
+        showMessageDialog(null, "Sleep in " + warning + " minutes" + System.getProperty("line.separator") + "Press OK to increase time");
+        increaseTimer();
     }
 
     public void acoustic(int reps) {

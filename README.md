@@ -3,6 +3,12 @@ bash and java Swing Application
 
  Fotosize: (640 x 360);
 
+To disable command enter '0' in settings if numeric value
+or leave empty if string
+
+
+
+
 ___Start Command in Ubuntu__________________________________________________________
 
 gnome-terminal -e "bash -i -c '/home/user//Shutdown_3.0/Main.sh -l;bash'"

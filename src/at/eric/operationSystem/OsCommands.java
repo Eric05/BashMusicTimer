@@ -52,7 +52,7 @@ public class OsCommands {
         try {
             if (path.toLowerCase().contains("win")) {
                 status = GetCmdValue.getValue(Storage.getValueByKey("battery", commands));
-            } else if (path.contains("mac")) {
+            } else if (path.toLowerCase().contains("mac")) {
                 status = GetBashValue.getValue(Storage.getValueByKey("battery", commands));
             } else {
                 status = GetBashValue.getValue(Storage.getValueByKey("battery", commands));

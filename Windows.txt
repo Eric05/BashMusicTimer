@@ -1,6 +1,6 @@
 shell;cmd /c start /b
 battery,WMIC PATH Win32_Battery Get EstimatedChargeRemaining
-connectBluetooth,
+bluetooth,echo hi
 mediaOn,vlc.exe
 mediaOff,taskkill /F /IM vlc.exe
 screenOn,taskkill /F /IM scrnsave.scr
