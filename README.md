@@ -3,6 +3,8 @@ bash and java Swing Application
 
  Fotosize: (640 x 360);
 
+... to use script: bash -c /pathToScript
+
 To disable command enter '0' in settings if numeric value
 or leave empty if string
 
