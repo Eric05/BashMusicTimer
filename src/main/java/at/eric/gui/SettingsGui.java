@@ -132,7 +132,8 @@ public class SettingsGui extends JFrame {
             if (c instanceof JTextField) {
                 if (((JTextField) c).getText().startsWith("list") ||
                         ((JTextField) c).getText().startsWith("browse") ||
-                        ((JTextField) c).getText().startsWith("off")) {
+                        ((JTextField) c).getText().startsWith("off") ||
+                        ((JTextField) c).getText().startsWith("shuffle")) {
                     sb.append(";").append(combo.getSelectedItem());
                 } else {
                     sb.append(";").append(((JTextField) c).getText());

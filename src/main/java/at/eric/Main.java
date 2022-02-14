@@ -1,20 +1,20 @@
 package at.eric;
 
 import at.eric.gui.MainGui;
-import at.eric.operationSystem.OsCommands;
-
 import javax.swing.*;
 
 class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
+        var outputArea = new JEditorPane();
+        var font = outputArea.getFont();
+        UIManager.put("TextField.font", font);
 
-new MainGui();
+        new MainGui();
 
     }
-
-
+    // Font font = new Font (fontFamily.getName(), Font.PLAIN, 12);
 }
 
 

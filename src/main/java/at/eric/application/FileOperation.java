@@ -18,7 +18,7 @@ public class FileOperation {
 
 
     public static String getCurrentWorkingDir() {
-/*        if (currentWorkingDir == null) {
+        if (currentWorkingDir == null) {
             try {
                 final var pathToJar = Path.of(FileOperation.class
                         .getProtectionDomain()
@@ -29,8 +29,8 @@ public class FileOperation {
                 e.printStackTrace();
             }
         }
-        return currentWorkingDir;*/
-        return System.getProperty("user.dir");
+        return currentWorkingDir;
+       //return System.getProperty("user.dir");
     }
 //TODO uncomment for production
 

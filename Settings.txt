@@ -1,11 +1,11 @@
-timer;3
+timer;
 root;C:\Music
 increment;2
 warning;2
 warnReps;2
-screenOffDelay;5
+screenOffDelay;2
 browser;firefox
 batteryLimit;15
-mode;list
+mode;shuffle
 bluetooth; echo 'hi'
-playlist;C:\Music\Test
+playlist;C:\Users\user\Desktop\Musik

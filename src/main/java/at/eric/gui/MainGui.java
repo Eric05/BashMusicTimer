@@ -14,12 +14,12 @@ import java.util.List;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainGui extends JFrame {
+    public static String playlist;
     private final List<String> commands = OsCommands.getOsCommands();
     JLabel l_playlist, l_timer, l_inc;
     JTextField tf_playlist, tf_timer;
     JButton b_playlist, b_timer, b_settings, b_browse, b_stop, b_start;
     private List<String> settings = new FileOperation("Settings.txt").getSettings();
-    private String playlist;
     private int time;
     private String root;
     private int increment;
@@ -51,8 +51,6 @@ public class MainGui extends JFrame {
 
         Thread t2 = new Thread(this::screenOff);
         Thread t3 = new Thread(this::setMode);
-
-
         t3.start();
         t2.start();
         t1.start();
@@ -197,8 +195,7 @@ public class MainGui extends JFrame {
         }
         if (mode.startsWith("browse")) {
             OsCommands.doCommand(Storage.getValueByKey("browser", settings));
-        }
-        else if (mode.startsWith("shuffle")) {
+        } else if (mode.startsWith("shuffle")) {
             App.main();
         } else {
             String path = Storage.getValueByKey("playlist", settings);
@@ -220,6 +217,12 @@ public class MainGui extends JFrame {
             if (parseInt(tf_timer.getText()) == warning) {
                 Thread t1 = new Thread(this::warning);
                 t1.start();
+            }
+            if (parseInt(tf_timer.getText()) == 1) {
+                String mode = Storage.getValueByKey("mode", settings);
+                if (mode.startsWith("shuffle")) {
+                    App.writeFile(playlist + File.separator + "playlist.txt");
+                }
             }
             Sleep.delayMinutes(1);
             int time = parseInt(tf_timer.getText());
@@ -297,7 +300,7 @@ public class MainGui extends JFrame {
     }
 
     public void setPlaylist(String playlist) {
-        this.playlist = playlist;
+        MainGui.playlist = playlist;
         String clean = playlist.replaceFirst("[.][^.]+$", "");
         File path = new File(clean);
         tf_playlist.setText(path.getName());
@@ -332,6 +335,7 @@ public class MainGui extends JFrame {
         }
         return num;
     }
+
 }
 
 

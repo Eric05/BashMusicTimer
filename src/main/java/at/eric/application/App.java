@@ -21,41 +21,60 @@ import java.util.stream.Stream;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
+//todo:
+// use font
+// create playlist folder in only one location
+// start new song without loading complete gui
+// update without having to restart
+// search not only mp3 but array [mp3, wav...]
+
 public class App extends JFrame {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static final String VIDEO_PATH = "C:\\Music\\Test2";
+    private static List<String> settings = new FileOperation("Settings.txt").getSettings();
+    private static String VIDEO_PATH = Storage.getValueByKey("playlist", settings);
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
+
     public App(String title) {
         super(title);
-        mediaPlayerComponent = getMediaPlayerComponent();
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutdown Hook is running !");
-            writeFile(VIDEO_PATH + File.separator + "playlist.txt", pos);
+            try {
+                var list = Files.readAllLines(Path.of(VIDEO_PATH + File.separator + "playlist.txt"));
+                int actual = Integer.parseInt(list.get(list.size() - 1));
+                if (actual != pos + 1) {
+                    writeFile(VIDEO_PATH + File.separator + "playlist.txt");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }));
-    }    private static final List<String> list = getFiles();
+        mediaPlayerComponent = getMediaPlayerComponent();
+    }
 
     private static EmbeddedMediaPlayerComponent getMediaPlayerComponent() {
         return new EmbeddedMediaPlayerComponent() {
             @Override
             public void playing(MediaPlayer mediaPlayer) {
                 super.playing(mediaPlayer);
-                System.out.println("Media Playback started." + songs.get(pos));
+                System.out.println(pos + ": Song started." + songs.get(pos));
             }
 
             @Override
             public void finished(MediaPlayer mediaPlayer) {
-                super.playing(mediaPlayer);
-                System.out.println("Media Playback finished.");
+                System.out.println("Song finished.");
                 setPos(pos);
-
                 songGui(songs.get(pos));
             }
         };
-    }    private static int pos = Integer.parseInt(list.get(list.size() - 1));
+    }
 
     public static void main() {
+        settings = new FileOperation("Settings.txt").getSettings();
+        VIDEO_PATH = Storage.getValueByKey("playlist", settings);
+        list = getFiles();
+        songs = getMp3Files(list);
+        pos = Integer.parseInt(list.get(list.size() - 1));
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
@@ -76,7 +95,7 @@ public class App extends JFrame {
     private static void playSong(String path) {
         mediaPlayerComponent.mediaPlayer().media().startPaused(path);
         mediaPlayerComponent.mediaPlayer().controls().play();
-    }    private static final List<String> songs = getMp3Files(list);
+    }    private static List<String> list = getFiles();
 
     private static List<String> getMp3Files(List<String> list) {
         List<String> files;
@@ -109,7 +128,7 @@ public class App extends JFrame {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                initFile(VIDEO_PATH + File.separator + "playlist.txt", pos);
+                initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
             }
         }
         try {
@@ -123,6 +142,7 @@ public class App extends JFrame {
     private static void initFile(String path, int max) {
         var mp3s = getMp3Files();
         Collections.shuffle(mp3s);
+        songs = getMp3Files(mp3s);
         mp3s.add(String.valueOf(max));
         try {
             Files.write(Path.of(path), mp3s);
@@ -131,14 +151,18 @@ public class App extends JFrame {
         }
     }
 
-    private static void writeFile(String path, int max) {
-        songs.add(String.valueOf(max));
-        try {
-            Files.write(Path.of(path), songs);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void writeFile(String path) {
+        if (pos >= songs.size() - 1) {
+            initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
+        } else {
+            songs.add(String.valueOf(pos + 1));
+            try {
+                Files.write(Path.of(path), songs);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
+    }    private static int pos = Integer.parseInt(list.get(list.size() - 1));
 
     public static String setSongTitle(String song) {
         String clean = song.replaceFirst("[.][^.]+$", "");
@@ -148,16 +172,16 @@ public class App extends JFrame {
 
     public static void setPos(int pos) {
         pos++;
-        if (pos >= songs.size() - 1) {
-            System.out.println("shuffling");
+        if (pos >= songs.size()) {
+            System.out.println("End of playlist. Shuffling");
             pos = 0;
-            initFile(VIDEO_PATH, pos);
+            initFile(VIDEO_PATH + File.separator + "playlist.txt", pos);
         }
         App.pos = pos;
     }
 
     public void initialize() {
-        this.setBounds(100, 100, 400, 100);
+        this.setBounds(100, 400, 400, 100);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -190,4 +214,9 @@ public class App extends JFrame {
     public void loadVideo(String path) {
         mediaPlayerComponent.mediaPlayer().media().startPaused(path);
     }
+
+
+    private static List<String> songs = getMp3Files(list);
+
+
 }
