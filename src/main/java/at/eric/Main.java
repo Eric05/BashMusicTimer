@@ -7,9 +7,7 @@ class Main {
 
     public static void main(String[] args) {
 
-        var outputArea = new JEditorPane();
-        var font = outputArea.getFont();
-        UIManager.put("TextField.font", font);
+
 
         new MainGui();
 

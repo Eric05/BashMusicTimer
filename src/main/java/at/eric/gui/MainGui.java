@@ -14,6 +14,8 @@ import java.util.List;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainGui extends JFrame {
+    JEditorPane outputArea = new JEditorPane();
+    Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
     public static String playlist;
     private final List<String> commands = OsCommands.getOsCommands();
     JLabel l_playlist, l_timer, l_inc;
@@ -83,6 +85,7 @@ public class MainGui extends JFrame {
         tf_playlist.setBounds(80, 30, 250, 20);
         tf_playlist.setBackground(Color.darkGray);
         tf_playlist.setForeground(Color.white);
+        tf_playlist.setFont(font);
         l_playlist.setForeground(Color.green);
 
         b_browse = new JButton(" ... ");
@@ -107,6 +110,7 @@ public class MainGui extends JFrame {
         tf_timer.setBounds(80, 60, 250, 20);
         tf_timer.setBackground(Color.darkGray);
         tf_timer.setForeground(Color.white);
+        tf_timer.setFont(font);
 
         l_inc = new JLabel("...");
         l_inc.setBounds(10, 90, 200, 20);
@@ -303,7 +307,7 @@ public class MainGui extends JFrame {
         MainGui.playlist = playlist;
         String clean = playlist.replaceFirst("[.][^.]+$", "");
         File path = new File(clean);
-        tf_playlist.setText(path.getName());
+        tf_playlist.setText(" " + path.getName());
     }
 
     public void warning() {

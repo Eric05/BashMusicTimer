@@ -3,7 +3,7 @@ root;C:\Music
 increment;2
 warning;2
 warnReps;2
-screenOffDelay;2
+screenOffDelay;
 browser;firefox
 batteryLimit;15
 mode;shuffle

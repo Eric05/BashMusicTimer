@@ -11,8 +11,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// UIManager.put("TextField.font", font);
 public class SettingsGui extends JFrame {
+
+    JEditorPane outputArea = new JEditorPane();
+    Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
 
     private final List<String> settings;
     private final FileOperation fo = new FileOperation("Settings.txt");
@@ -32,6 +35,7 @@ public class SettingsGui extends JFrame {
         l_playlist.setBounds(20, 50, 150, 20);
         tf_playlist = new JTextField(Storage.getValueByKey("playlist", settings));
         tf_playlist.setBounds(150, 50, 170, 20);
+        tf_playlist.setFont(font);
         l_playlist.setForeground(Color.green);
         b_browse = new JButton(" ...");
         b_browse.setBounds(320, 50, 30, 20);
@@ -95,6 +99,7 @@ public class SettingsGui extends JFrame {
             l.setBounds(20, posY, 150, 20);
             tf = new JTextField(val);
             tf.setBounds(150, posY, 200, 20);
+            tf.setFont(font);
             l.setForeground(Color.blue);
             add(l);
             add(tf);
