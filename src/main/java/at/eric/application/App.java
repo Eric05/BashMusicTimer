@@ -49,25 +49,8 @@ public class App extends JFrame {
                 e.printStackTrace();
             }
         }));
-        mediaPlayerComponent = getMediaPlayerComponent();
-    }
-
-    private static EmbeddedMediaPlayerComponent getMediaPlayerComponent() {
-        return new EmbeddedMediaPlayerComponent() {
-            @Override
-            public void playing(MediaPlayer mediaPlayer) {
-                super.playing(mediaPlayer);
-                System.out.println(pos + ": Song started." + songs.get(pos));
             }
 
-            @Override
-            public void finished(MediaPlayer mediaPlayer) {
-                System.out.println("Song finished.");
-                setPos(pos);
-                songGui(songs.get(pos));
-            }
-        };
-    }
 
     public static void main() {
         settings = new FileOperation("Settings.txt").getSettings();
@@ -88,8 +71,8 @@ public class App extends JFrame {
         App application = new App(setSongTitle(songs.get(pos)));
         application.initialize();
         application.setVisible(true);
+        application.setContentPane(path);
         application.loadVideo(path);
-        playSong(path);
     }
 
     private static void playSong(String path) {
@@ -190,6 +173,24 @@ public class App extends JFrame {
                 System.exit(0);
             }
         });
+    }
+
+    public void setContentPane(String path) {
+        mediaPlayerComponent = new EmbeddedMediaPlayerComponent() {
+            @Override
+            public void playing(MediaPlayer mediaPlayer) {
+                super.playing(mediaPlayer);
+                System.out.println("Media Playback started.");
+            }
+            @Override
+            public void finished(MediaPlayer mediaPlayer) {
+                super.playing(mediaPlayer);
+                System.out.println("Media Playback finished.");
+                setPos(pos);
+                setContentPane(songs.get(pos));
+            }
+        };
+        this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);
@@ -206,13 +207,14 @@ public class App extends JFrame {
         playButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().play());
         pauseButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().pause());
         rewindButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(-14000));
-        skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(4000));
+        skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(180000));
         this.setContentPane(contentPane);
         this.setVisible(true);
+        this.loadVideo(path);
     }
 
     public void loadVideo(String path) {
-        mediaPlayerComponent.mediaPlayer().media().startPaused(path);
+        mediaPlayerComponent.mediaPlayer().media().start(path);
     }
 
 
