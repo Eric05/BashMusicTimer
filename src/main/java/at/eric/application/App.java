@@ -24,9 +24,10 @@ import static javax.swing.JOptionPane.showMessageDialog;
 //todo:
 // use font
 // create playlist folder in only one location
-// start new song without loading complete gui
 // update without having to restart
 // search not only mp3 but array [mp3, wav...]
+// Done:
+// start new song without loading complete gui
 
 public class App extends JFrame {
     @Serial
@@ -165,7 +166,7 @@ public class App extends JFrame {
     }
 
     public void initialize() {
-        this.setBounds(0, 360, 640, 200);
+        this.setBounds(0, 360, 640, 160);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // to remove border -> this.setUndecorated(true);
         this.addWindowListener(new WindowAdapter() {
@@ -175,7 +176,7 @@ public class App extends JFrame {
                 System.exit(0);
             }
         });
-       l_nextSong.setBounds(10, 370, 80, 800);
+       l_nextSong.setBounds(10, 340, 150, 80);
        add(l_nextSong);
 
     }
@@ -193,7 +194,7 @@ public class App extends JFrame {
                 System.out.println("Media Playback finished.");
                 setPos(pos);
                 setContentPane(songs.get(pos));
-                l_nextSong.setText(songs.get(pos+1));
+                printInfo();
             }
         };
         this.setTitle(setSongTitle(path));
@@ -224,7 +225,20 @@ public class App extends JFrame {
     }
 
     private void printInfo() {
-        l_nextSong.setText("<html><body>Playing:" + setSongTitle(songs.get(pos)) + "<br>Next:" + setSongTitle(songs.get(pos +1)) +"</body></html>");
+        if(songs.size()-2 > pos) {
+            try {
+                l_nextSong.setText("<html><body>Next:<br>" +
+                        setSongTitle(songs.get(pos+1)) +
+                        "<br>" +
+                        setSongTitle(songs.get(pos + 2)) +
+                        "</body></html>");
+            } catch (Exception e) {
+                l_nextSong.setText("Shuffling");
+            }
+        } else {
+            l_nextSong.setText("Shuffling");
+        }
+
     }
 
     public void loadVideo(String path) {
