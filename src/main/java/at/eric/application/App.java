@@ -22,6 +22,9 @@ import java.util.stream.Stream;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 //todo:
+// skip -> find goot timespan
+// bool for shuffle mode
+// css design
 // use font
 // create playlist folder in only one location
 // update without having to restart
@@ -80,7 +83,8 @@ public class App extends JFrame {
     private static void playSong(String path) {
         mediaPlayerComponent.mediaPlayer().media().startPaused(path);
         mediaPlayerComponent.mediaPlayer().controls().play();
-    }    private static List<String> list = getFiles();
+    }
+    private static List<String> list = getFiles();
 
     private static List<String> getMp3Files(List<String> list) {
         List<String> files;
@@ -177,6 +181,7 @@ public class App extends JFrame {
             }
         });
        l_nextSong.setBounds(10, 340, 150, 80);
+      // l_nextSong.setFont(new Font("Verdana", Font.PLAIN, 12));
        add(l_nextSong);
 
     }
@@ -227,7 +232,7 @@ public class App extends JFrame {
     private void printInfo() {
         if(songs.size()-2 > pos) {
             try {
-                l_nextSong.setText("<html><body>Next:<br>" +
+                l_nextSong.setText("<html><body style=\\\"padding:10px;\\\"> Next:<br>" +
                         setSongTitle(songs.get(pos+1)) +
                         "<br>" +
                         setSongTitle(songs.get(pos + 2)) +
