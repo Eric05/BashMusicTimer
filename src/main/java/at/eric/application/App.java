@@ -34,6 +34,7 @@ public class App extends JFrame {
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
     private static String VIDEO_PATH = Storage.getValueByKey("playlist", settings);
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
+    public JLabel l_nextSong = new JLabel("");
 
     public App(String title) {
         super(title);
@@ -164,8 +165,9 @@ public class App extends JFrame {
     }
 
     public void initialize() {
-        this.setBounds(100, 400, 400, 100);
+        this.setBounds(0, 360, 640, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // to remove border -> this.setUndecorated(true);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -173,6 +175,9 @@ public class App extends JFrame {
                 System.exit(0);
             }
         });
+       l_nextSong.setBounds(10, 370, 80, 800);
+       add(l_nextSong);
+
     }
 
     public void setContentPane(String path) {
@@ -188,11 +193,15 @@ public class App extends JFrame {
                 System.out.println("Media Playback finished.");
                 setPos(pos);
                 setContentPane(songs.get(pos));
+                l_nextSong.setText(songs.get(pos+1));
             }
         };
         this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
+        l_nextSong.setForeground(Color.blue);
+        l_nextSong.setBackground(Color.yellow);
+        contentPane.add(l_nextSong);
         contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);
         JPanel controlsPane = new JPanel();
         JButton playButton = new JButton("Play");
@@ -208,9 +217,14 @@ public class App extends JFrame {
         pauseButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().pause());
         rewindButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(-14000));
         skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(180000));
+        printInfo();
         this.setContentPane(contentPane);
         this.setVisible(true);
         this.loadVideo(path);
+    }
+
+    private void printInfo() {
+        l_nextSong.setText("<html><body>Playing:" + setSongTitle(songs.get(pos)) + "<br>Next:" + setSongTitle(songs.get(pos +1)) +"</body></html>");
     }
 
     public void loadVideo(String path) {
