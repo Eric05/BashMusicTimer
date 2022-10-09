@@ -28,6 +28,11 @@ ___If Screen doesnt stay black__________________________________________________
  sleep 9 && wmctrl -k on; changes to desktop
 
 
+Wayland:
+
+ dbus-send --session --dest=org.gnome.ScreenSaver --type=method_call \
+ /org/gnome/ScreenSaver org.gnome.ScreenSaver.SetActive boolean:true
+
 ___Bluetooth_________________________________________________________________________
 
 Get Mac Adress with bt-device -l after installing bluez-tools / Ubuntu
