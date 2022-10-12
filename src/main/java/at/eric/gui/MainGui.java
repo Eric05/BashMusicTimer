@@ -9,13 +9,28 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainGui extends JFrame {
     JEditorPane outputArea = new JEditorPane();
-    Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
+
+    File font_file = new File("Audiowide-Regular.ttf");
+
+    Font font;
+    {
+        try {
+            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
+            font = thefont.deriveFont(14f);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String playlist;
     private final List<String> commands = OsCommands.getOsCommands();
     JLabel l_playlist, l_timer, l_inc;
@@ -32,6 +47,7 @@ public class MainGui extends JFrame {
     public MainGui() {
         super("Music Player");
 
+        UIManager.put("Label.font", font);
         if (!Storage.getValueByKey("batteryLimit", settings).isBlank() &&
                 parseInt(Storage.getValueByKey("batteryLimit", settings)) > 0) {
             checkBattery();
@@ -79,35 +95,36 @@ public class MainGui extends JFrame {
         }
 
         l_playlist = new JLabel("PLAYLIST:");
-        l_playlist.setBounds(10, 30, 80, 20);
+        l_playlist.setBounds(10, 30, 100, 20);
 
         tf_playlist = new JTextField();
-        tf_playlist.setBounds(80, 30, 250, 20);
+        tf_playlist.setBounds(100, 30, 250, 20);
         tf_playlist.setBackground(Color.darkGray);
         tf_playlist.setForeground(Color.white);
+        tf_playlist.setFont(new Font(font.getFontName(), Font.PLAIN, 16));
         tf_playlist.setFont(font);
         l_playlist.setForeground(Color.green);
 
         b_browse = new JButton(" ... ");
-        b_browse.setBounds(330, 30, 50, 20);
+        b_browse.setBounds(350, 30, 100, 20);
         b_browse.addActionListener(this::changePlaylist);
         b_browse.setToolTipText("Change Playlist temporarily");
 
         l_timer = new JLabel("SLEEP IN:");
-        l_timer.setBounds(10, 60, 80, 20);
+        l_timer.setBounds(10, 60, 100, 20);
         l_timer.setForeground(Color.blue);
 
         b_stop = new JButton("x");
-        b_stop.setBounds(330, 60, 25, 20);
+        b_stop.setBounds(350, 60, 50, 20);
         b_stop.addActionListener(this::stopTimer);
         b_start = new JButton(">");
-        b_start.setBounds(355, 60, 25, 20);
+        b_start.setBounds(400, 60, 50, 20);
         b_start.addActionListener(this::startTimer);
         b_start.setToolTipText("Start Timer");
         b_stop.setToolTipText("Stop Timer");
 
         tf_timer = new JTextField();
-        tf_timer.setBounds(80, 60, 250, 20);
+        tf_timer.setBounds(100, 60, 250, 20);
         tf_timer.setBackground(Color.darkGray);
         tf_timer.setForeground(Color.white);
         tf_timer.setFont(font);
@@ -116,16 +133,16 @@ public class MainGui extends JFrame {
         l_inc.setBounds(10, 90, 200, 20);
         l_inc.setForeground(Color.blue);
 
-        b_playlist = new JButton("Update Settings");
-        b_playlist.setBounds(10, 220, 150, 30);
+        b_playlist = new JButton("Update");
+        b_playlist.setBounds(460, 260, 120, 30);
         b_playlist.addActionListener(this::update);
 
-        b_settings = new JButton("Change Settings");
-        b_settings.setBounds(10, 180, 150, 30);
+        b_settings = new JButton("Change");
+        b_settings.setBounds(340, 260, 120, 30);
         b_settings.addActionListener(this::changeSettings);
 
-        b_timer = new JButton("Increase Timer");
-        b_timer.setBounds(10, 260, 150, 30);
+        b_timer = new JButton("Increase");
+        b_timer.setBounds(10, 260, 120, 30);
         b_timer.addActionListener(this::increaseTimer);
 
         add(l_playlist);
@@ -143,6 +160,7 @@ public class MainGui extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getRootPane().setDefaultButton(b_timer);
         setSize(640, 360);
+        changeFont(this,font);
         setLayout(null);
         setVisible(true);
     }
@@ -338,6 +356,17 @@ public class MainGui extends JFrame {
             num = 0;
         }
         return num;
+    }
+    public static void changeFont ( Component component, Font font )
+    {
+        component.setFont ( font );
+        if ( component instanceof Container )
+        {
+            for ( Component child : ( ( Container ) component ).getComponents () )
+            {
+                changeFont ( child, font );
+            }
+        }
     }
 
 }

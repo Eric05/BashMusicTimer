@@ -38,11 +38,27 @@ public class App extends JFrame {
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
     private static String VIDEO_PATH = Storage.getValueByKey("playlist", settings);
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
-    public JLabel l_nextSong = new JLabel("");
+    private static String appTitle = "Radio " + new File(VIDEO_PATH).getName();
+
+    File font_file = new File("Audiowide-Regular.ttf");
+    Font font;
+    {
+        try {
+            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
+            font = thefont.deriveFont(14f);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public JLabel l_nextSong = new JLabel("", SwingConstants.CENTER );
 
     public App(String title) {
-        super(title);
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+
+        super(appTitle);
+        UIManager.put("Label.font", font);
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutdown Hook is running !");
             try {
                 var list = Files.readAllLines(Path.of(VIDEO_PATH + File.separator + "playlist.txt"));
@@ -170,7 +186,7 @@ public class App extends JFrame {
     }
 
     public void initialize() {
-        this.setBounds(0, 360, 640, 160);
+        this.setBounds(0, 360, 640, 180);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // to remove border -> this.setUndecorated(true);
         this.addWindowListener(new WindowAdapter() {
@@ -180,8 +196,10 @@ public class App extends JFrame {
                 System.exit(0);
             }
         });
+
        l_nextSong.setBounds(10, 340, 150, 80);
-      // l_nextSong.setFont(new Font("Verdana", Font.PLAIN, 12));
+       l_nextSong.setFont(font);
+
        add(l_nextSong);
 
     }
@@ -202,14 +220,15 @@ public class App extends JFrame {
                 printInfo();
             }
         };
-        this.setTitle(setSongTitle(path));
+        //this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
-        l_nextSong.setForeground(Color.blue);
-        l_nextSong.setBackground(Color.yellow);
+        l_nextSong.setForeground(Color.white);
         contentPane.add(l_nextSong);
+        l_nextSong.setFont(font);
         contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);
         JPanel controlsPane = new JPanel();
+        controlsPane.setBackground(Color.black);
         JButton playButton = new JButton("Play");
         controlsPane.add(playButton);
         JButton pauseButton = new JButton("Pause");
@@ -223,6 +242,7 @@ public class App extends JFrame {
         pauseButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().pause());
         rewindButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(-14000));
         skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(180000));
+        changeFont(contentPane, font);
         printInfo();
         this.setContentPane(contentPane);
         this.setVisible(true);
@@ -232,10 +252,12 @@ public class App extends JFrame {
     private void printInfo() {
         if(songs.size()-2 > pos) {
             try {
-                l_nextSong.setText("<html><body style=\\\"padding:10px;\\\"> Next:<br>" +
-                        setSongTitle(songs.get(pos+1)) +
+                l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:40px;\\\"> <b><br>" +
+                        setSongTitle(songs.get(pos)) +
+                        "</b><br><br>" +
+                        "-> " + setSongTitle(songs.get(pos+1)) +
                         "<br>" +
-                        setSongTitle(songs.get(pos + 2)) +
+                        "-> " + setSongTitle(songs.get(pos + 2)) +
                         "</body></html>");
             } catch (Exception e) {
                 l_nextSong.setText("Shuffling");
@@ -244,6 +266,18 @@ public class App extends JFrame {
             l_nextSong.setText("Shuffling");
         }
 
+    }
+
+    public static void changeFont ( Component component, Font font )
+    {
+        component.setFont ( font );
+        if ( component instanceof Container )
+        {
+            for ( Component child : ( ( Container ) component ).getComponents () )
+            {
+                changeFont ( child, font );
+            }
+        }
     }
 
     public void loadVideo(String path) {
