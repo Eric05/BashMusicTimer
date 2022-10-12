@@ -46,6 +46,7 @@ public class App extends JFrame {
         try {
             Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
             font = thefont.deriveFont(14f);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -223,7 +224,7 @@ public class App extends JFrame {
         //this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
-        l_nextSong.setForeground(Color.white);
+        l_nextSong.setForeground(Color.blue);
         contentPane.add(l_nextSong);
         l_nextSong.setFont(font);
         contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);
