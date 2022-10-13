@@ -1,5 +1,6 @@
 package at.eric.gui;
 
+import at.eric.application.App;
 import at.eric.application.FileDialog;
 import at.eric.application.FileOperation;
 import at.eric.application.Storage;
@@ -8,14 +9,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 // UIManager.put("TextField.font", font);
 public class SettingsGui extends JFrame {
 
+    File font_file = new File("Audiowide-Regular.ttf");
+    Font font;
+    {
+        try {
+            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
+            font = thefont.deriveFont(12f);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     JEditorPane outputArea = new JEditorPane();
-    Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
+    //UIManager.put("TextField.font", font);
+    //Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
 
     private final List<String> settings;
     private final FileOperation fo = new FileOperation("Settings.txt");
@@ -66,6 +82,7 @@ public class SettingsGui extends JFrame {
         getContentPane().setBackground(Color.BLACK);
         pack();
         setSize(400, 500);
+        App.changeFont(combo,font);
         getContentPane().setForeground(Color.orange);
         setLayout(null);
         setVisible(true);

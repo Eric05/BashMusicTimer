@@ -224,7 +224,7 @@ public class App extends JFrame {
         //this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
-        l_nextSong.setForeground(Color.blue);
+        l_nextSong.setForeground(Color.white);
         contentPane.add(l_nextSong);
         l_nextSong.setFont(font);
         contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);

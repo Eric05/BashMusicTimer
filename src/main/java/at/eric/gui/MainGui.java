@@ -98,7 +98,7 @@ public class MainGui extends JFrame {
         l_playlist.setBounds(10, 30, 100, 20);
 
         tf_playlist = new JTextField();
-        tf_playlist.setBounds(100, 30, 250, 20);
+        tf_playlist.setBounds(120, 28, 250, 25);
         tf_playlist.setBackground(Color.darkGray);
         tf_playlist.setForeground(Color.white);
         tf_playlist.setFont(new Font(font.getFontName(), Font.PLAIN, 16));
@@ -106,39 +106,39 @@ public class MainGui extends JFrame {
         l_playlist.setForeground(Color.green);
 
         b_browse = new JButton(" ... ");
-        b_browse.setBounds(350, 30, 100, 20);
+        b_browse.setBounds(370, 28, 100, 25);
         b_browse.addActionListener(this::changePlaylist);
         b_browse.setToolTipText("Change Playlist temporarily");
 
         l_timer = new JLabel("SLEEP IN:");
-        l_timer.setBounds(10, 60, 100, 20);
-        l_timer.setForeground(Color.blue);
+        l_timer.setBounds(10, 60, 100, 25);
+        l_timer.setForeground(Color.white);
 
         b_stop = new JButton("x");
-        b_stop.setBounds(350, 60, 50, 20);
+        b_stop.setBounds(370, 60, 50, 25);
         b_stop.addActionListener(this::stopTimer);
         b_start = new JButton(">");
-        b_start.setBounds(400, 60, 50, 20);
+        b_start.setBounds(420, 60, 50, 25);
         b_start.addActionListener(this::startTimer);
         b_start.setToolTipText("Start Timer");
         b_stop.setToolTipText("Stop Timer");
 
         tf_timer = new JTextField();
-        tf_timer.setBounds(100, 60, 250, 20);
+        tf_timer.setBounds(120, 60, 250, 25);
         tf_timer.setBackground(Color.darkGray);
         tf_timer.setForeground(Color.white);
         tf_timer.setFont(font);
 
         l_inc = new JLabel("...");
         l_inc.setBounds(10, 90, 200, 20);
-        l_inc.setForeground(Color.blue);
+        l_inc.setForeground(Color.white);
 
         b_playlist = new JButton("Update");
-        b_playlist.setBounds(460, 260, 120, 30);
+        b_playlist.setBounds(350, 260, 120, 30);
         b_playlist.addActionListener(this::update);
 
         b_settings = new JButton("Change");
-        b_settings.setBounds(340, 260, 120, 30);
+        b_settings.setBounds(230, 260, 120, 30);
         b_settings.addActionListener(this::changeSettings);
 
         b_timer = new JButton("Increase");
@@ -313,7 +313,7 @@ public class MainGui extends JFrame {
 
     public void setIncrement(int increment) {
         this.increment = increment;
-        l_inc.setText("Increase:     " + increment + " min");
+        l_inc.setText("Increase:         " + increment + " min");
     }
 
     public void setTime(int time) {
