@@ -9,30 +9,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainGui extends JFrame {
-    JEditorPane outputArea = new JEditorPane();
-
-    File font_file = new File("Audiowide-Regular.ttf");
-
-    Font font;
-    {
-        try {
-            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
-            font = thefont.deriveFont(14f);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static String playlist;
     private final List<String> commands = OsCommands.getOsCommands();
+    File font_file = new File("Audiowide-Regular.ttf");
+    Font font;
     JLabel l_playlist, l_timer, l_inc;
     JTextField tf_playlist, tf_timer;
     JButton b_playlist, b_timer, b_settings, b_browse, b_stop, b_start;
@@ -43,6 +29,15 @@ public class MainGui extends JFrame {
     private int warning;
     private boolean isScreenOff = false;
     private int delay = 1;
+
+    {
+        try {
+            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
+            font = thefont.deriveFont(14f);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public MainGui() {
         super("Music Player");
@@ -75,6 +70,15 @@ public class MainGui extends JFrame {
 
     }
 
+    public static void changeFont(Component component, Font font) {
+        component.setFont(font);
+        if (component instanceof Container) {
+            for (Component child : ((Container) component).getComponents()) {
+                changeFont(child, font);
+            }
+        }
+    }
+
     public void createGui() {
         String currentWorkingDir = FileOperation.getCurrentWorkingDir();
         var pathToPicture = new File(currentWorkingDir + File.separator + "mic.jpg");
@@ -91,7 +95,7 @@ public class MainGui extends JFrame {
                 throw new RuntimeException(e);
             }
         } else {
-            getContentPane().setBackground(Color.black);
+            getContentPane().setBackground(new Color(26, 26, 26));
         }
 
         l_playlist = new JLabel("PLAYLIST:");
@@ -160,7 +164,7 @@ public class MainGui extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getRootPane().setDefaultButton(b_timer);
         setSize(640, 360);
-        changeFont(this,font);
+        changeFont(this, font);
         setLayout(null);
         setVisible(true);
     }
@@ -356,17 +360,6 @@ public class MainGui extends JFrame {
             num = 0;
         }
         return num;
-    }
-    public static void changeFont ( Component component, Font font )
-    {
-        component.setFont ( font );
-        if ( component instanceof Container )
-        {
-            for ( Component child : ( ( Container ) component ).getComponents () )
-            {
-                changeFont ( child, font );
-            }
-        }
     }
 
 }

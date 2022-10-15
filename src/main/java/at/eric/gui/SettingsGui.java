@@ -16,29 +16,26 @@ import java.util.List;
 // UIManager.put("TextField.font", font);
 public class SettingsGui extends JFrame {
 
+    private final List<String> settings;
+    private final FileOperation fo = new FileOperation("Settings.txt");
     File font_file = new File("Audiowide-Regular.ttf");
+    //UIManager.put("TextField.font", font);
+    //Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
     Font font;
+    JLabel l_playlist, l;
+    JTextField tf_playlist, tf;
+    JButton b_browse, b_save;
+    JComboBox<String> combo = new JComboBox<>();
+
     {
         try {
             Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
             font = thefont.deriveFont(12f);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
     }
-    JEditorPane outputArea = new JEditorPane();
-    //UIManager.put("TextField.font", font);
-    //Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
-
-    private final List<String> settings;
-    private final FileOperation fo = new FileOperation("Settings.txt");
-    JLabel l_playlist, l;
-    JTextField tf_playlist, tf;
-    JButton b_browse, b_save;
-    JComboBox<String> combo = new JComboBox<>();
 
     public SettingsGui() {
         super("Music Player");
@@ -79,11 +76,10 @@ public class SettingsGui extends JFrame {
         add(combo);
 
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        getContentPane().setBackground(Color.BLACK);
+        getContentPane().setBackground(new Color(26, 26, 26));
         pack();
         setSize(400, 500);
-        App.changeFont(combo,font);
-        getContentPane().setForeground(Color.orange);
+        App.changeFont(combo, font);
         setLayout(null);
         setVisible(true);
     }
@@ -117,7 +113,7 @@ public class SettingsGui extends JFrame {
             tf = new JTextField(val);
             tf.setBounds(150, posY, 200, 20);
             tf.setFont(font);
-            l.setForeground(Color.blue);
+            l.setForeground(Color.white);
             add(l);
             add(tf);
             posY += 30;

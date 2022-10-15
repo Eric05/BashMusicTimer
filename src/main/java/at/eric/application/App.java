@@ -38,7 +38,7 @@ public class App extends JFrame {
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
     private static String VIDEO_PATH = Storage.getValueByKey("playlist", settings);
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
-    private static String appTitle = "Radio " + new File(VIDEO_PATH).getName();
+    private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
 
     File font_file = new File("Audiowide-Regular.ttf");
     Font font;
@@ -47,15 +47,13 @@ public class App extends JFrame {
             Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
             font = thefont.deriveFont(14f);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
     }
     public JLabel l_nextSong = new JLabel("", SwingConstants.CENTER );
 
-    public App(String title) {
+    public App() {
 
         super(appTitle);
         UIManager.put("Label.font", font);
@@ -78,29 +76,26 @@ public class App extends JFrame {
         settings = new FileOperation("Settings.txt").getSettings();
         VIDEO_PATH = Storage.getValueByKey("playlist", settings);
         list = getFiles();
+        assert list != null;
         songs = getMp3Files(list);
         pos = Integer.parseInt(list.get(list.size() - 1));
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("error " + e);
         }
         songGui(songs.get(pos));
     }
 
     private static void songGui(String path) {
-        App application = new App(setSongTitle(songs.get(pos)));
+        App application = new App();
         application.initialize();
         application.setVisible(true);
         application.setContentPane(path);
         application.loadVideo(path);
     }
 
-    private static void playSong(String path) {
-        mediaPlayerComponent.mediaPlayer().media().startPaused(path);
-        mediaPlayerComponent.mediaPlayer().controls().play();
-    }
     private static List<String> list = getFiles();
 
     private static List<String> getMp3Files(List<String> list) {
@@ -130,7 +125,10 @@ public class App extends JFrame {
             f = new File(VIDEO_PATH + File.separator + "playlist.txt");
             if (!f.exists()) {
                 try {
-                    f.createNewFile();
+                   boolean isFileCreated =  f.createNewFile();
+                    if (!isFileCreated) {
+                        throw new IOException("Unable to create file at specified path. It already exists");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -168,7 +166,12 @@ public class App extends JFrame {
                 e.printStackTrace();
             }
         }
-    }    private static int pos = Integer.parseInt(list.get(list.size() - 1));
+    }    private static int pos;
+
+    static {
+        assert list != null;
+        pos = Integer.parseInt(list.get(list.size() - 1));
+    }
 
     public static String setSongTitle(String song) {
         String clean = song.replaceFirst("[.][^.]+$", "");
@@ -198,8 +201,7 @@ public class App extends JFrame {
             }
         });
 
-       l_nextSong.setBounds(10, 340, 150, 80);
-       l_nextSong.setFont(font);
+           l_nextSong.setFont(font);
 
        add(l_nextSong);
 
@@ -223,13 +225,18 @@ public class App extends JFrame {
         };
         //this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
-        contentPane.setLayout(new BorderLayout());
+
+        //contentPane.setBackground(new Color(8,8,62));
         l_nextSong.setForeground(Color.white);
+        l_nextSong.setOpaque(true);
+        l_nextSong.setBackground(new Color(26,26,26));
+        l_nextSong.setBounds(0, 0, 640, 110);
         contentPane.add(l_nextSong);
         l_nextSong.setFont(font);
+        contentPane.setLayout(new BorderLayout());
         contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);
         JPanel controlsPane = new JPanel();
-        controlsPane.setBackground(Color.black);
+        controlsPane.setBackground(new Color(26,26,26));
         JButton playButton = new JButton("Play");
         controlsPane.add(playButton);
         JButton pauseButton = new JButton("Pause");
@@ -253,7 +260,7 @@ public class App extends JFrame {
     private void printInfo() {
         if(songs.size()-2 > pos) {
             try {
-                l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:40px;\\\"> <b><br>" +
+                l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
                         setSongTitle(songs.get(pos)) +
                         "</b><br><br>" +
                         "-> " + setSongTitle(songs.get(pos+1)) +
