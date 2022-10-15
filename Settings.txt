@@ -8,4 +8,5 @@ browser;firefox
 batteryLimit;15
 mode;shuffle
 bluetooth; echo 'hi'
+shuffle;
 playlist;C:\Users\user\Desktop\Musik

@@ -5,6 +5,7 @@ import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -37,6 +38,7 @@ public class App extends JFrame {
     private static final long serialVersionUID = 1L;
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
     private static String VIDEO_PATH = Storage.getValueByKey("playlist", settings);
+    private static final boolean isNoShuffle = (Storage.getValueByKey("shuffle", settings).startsWith("1"));
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
     private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
 
@@ -145,7 +147,9 @@ public class App extends JFrame {
 
     private static void initFile(String path, int max) {
         var mp3s = getMp3Files();
-        Collections.shuffle(mp3s);
+        if(!isNoShuffle) {
+            Collections.shuffle(mp3s);
+        }
         songs = getMp3Files(mp3s);
         mp3s.add(String.valueOf(max));
         try {
@@ -226,11 +230,18 @@ public class App extends JFrame {
         //this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
 
-        //contentPane.setBackground(new Color(8,8,62));
+        JButton b_reset = new JButton("<>");
+        b_reset.setBorderPainted(false);
+        b_reset.setOpaque(true);
+        b_reset.setBackground(new Color(26,26,26));
+        b_reset.setBounds(2, 117, 50, 20);
+        b_reset.addActionListener(this::resetFile);
+        b_reset.setToolTipText("Reset Playlist");
         l_nextSong.setForeground(Color.white);
         l_nextSong.setOpaque(true);
         l_nextSong.setBackground(new Color(26,26,26));
         l_nextSong.setBounds(0, 0, 640, 110);
+        contentPane.add(b_reset);
         contentPane.add(l_nextSong);
         l_nextSong.setFont(font);
         contentPane.setLayout(new BorderLayout());
@@ -255,6 +266,10 @@ public class App extends JFrame {
         this.setContentPane(contentPane);
         this.setVisible(true);
         this.loadVideo(path);
+    }
+
+    private void resetFile(ActionEvent actionEvent) {
+        initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
     }
 
     private void printInfo() {
