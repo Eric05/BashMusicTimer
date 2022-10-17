@@ -9,4 +9,5 @@ batteryLimit;15
 mode;shuffle
 bluetooth; echo 'hi'
 shuffle;
+resetPlay;18
 playlist;C:\Users\user\Desktop\Musik

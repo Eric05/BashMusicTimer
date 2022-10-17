@@ -23,15 +23,15 @@ import java.util.stream.Stream;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 //todo:
-// skip -> find goot timespan
-// bool for shuffle mode
-// css design
-// use font
+// skip -> find good timespan
 // create playlist folder in only one location
 // update without having to restart
 // search not only mp3 but array [mp3, wav...]
 // Done:
 // start new song without loading complete gui
+// bool for shuffle mode
+// css design
+// use font
 
 public class App extends JFrame {
     @Serial
@@ -39,6 +39,7 @@ public class App extends JFrame {
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
     private static String VIDEO_PATH = Storage.getValueByKey("playlist", settings);
     private static final boolean isNoShuffle = (Storage.getValueByKey("shuffle", settings).startsWith("1"));
+    private static final String resetPlaylistAfterTimespan = (Storage.getValueByKey("resetPlay", settings));
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
     private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
 
@@ -56,7 +57,6 @@ public class App extends JFrame {
     public JLabel l_nextSong = new JLabel("", SwingConstants.CENTER );
 
     public App() {
-
         super(appTitle);
         UIManager.put("Label.font", font);
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -70,17 +70,19 @@ public class App extends JFrame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }));
-            }
-
+                }));
+    }
 
     public static void main() {
         settings = new FileOperation("Settings.txt").getSettings();
         VIDEO_PATH = Storage.getValueByKey("playlist", settings);
         list = getFiles();
-        assert list != null;
-        songs = getMp3Files(list);
-        pos = Integer.parseInt(list.get(list.size() - 1));
+        if (list != null) {
+            songs = getMp3Files(list);
+            pos = Integer.parseInt(list.get(list.size() - 1));
+        } else {
+            ErrorLogger.writeError("NullExceptionError while reading playlist");
+        }
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
@@ -137,6 +139,13 @@ public class App extends JFrame {
                 initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
             }
         }
+        if( !resetPlaylistAfterTimespan.equals("")) {
+            long timespan = Long.parseLong(resetPlaylistAfterTimespan);
+            long deletion = System.currentTimeMillis() - (timespan * 24 * 60 * 60 * 1000);
+            if (f.lastModified() < deletion) {
+                initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
+            }
+        }
         try {
             return Files.readAllLines(Path.of(VIDEO_PATH + File.separator + "playlist.txt"));
         } catch (IOException e) {
@@ -173,8 +182,11 @@ public class App extends JFrame {
     }    private static int pos;
 
     static {
-        assert list != null;
-        pos = Integer.parseInt(list.get(list.size() - 1));
+       if (list != null) {
+           pos = Integer.parseInt(list.get(list.size() - 1));
+       } else {
+           ErrorLogger.writeError("NullExceptionError while reading playlist");
+       }
     }
 
     public static String setSongTitle(String song) {
@@ -204,11 +216,6 @@ public class App extends JFrame {
                 System.exit(0);
             }
         });
-
-           l_nextSong.setFont(font);
-
-       add(l_nextSong);
-
     }
 
     public void setContentPane(String path) {
@@ -227,13 +234,12 @@ public class App extends JFrame {
                 printInfo();
             }
         };
-        //this.setTitle(setSongTitle(path));
         JPanel contentPane = new JPanel();
-
         JButton b_reset = new JButton("<>");
         b_reset.setBorderPainted(false);
         b_reset.setOpaque(true);
         b_reset.setBackground(new Color(26,26,26));
+        b_reset.setForeground(Color.white);
         b_reset.setBounds(2, 117, 50, 20);
         b_reset.addActionListener(this::resetFile);
         b_reset.setToolTipText("Reset Playlist");

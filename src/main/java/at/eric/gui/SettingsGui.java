@@ -19,8 +19,6 @@ public class SettingsGui extends JFrame {
     private final List<String> settings;
     private final FileOperation fo = new FileOperation("Settings.txt");
     File font_file = new File("Audiowide-Regular.ttf");
-    //UIManager.put("TextField.font", font);
-    //Font font = new Font(outputArea.getFont().getName(), Font.PLAIN,12);
     Font font;
     JLabel l_playlist, l;
     JTextField tf_playlist, tf;
@@ -55,7 +53,7 @@ public class SettingsGui extends JFrame {
         b_browse.addActionListener(this::changePlaylist);
 
         b_save = new JButton("SAVE");
-        b_save.setBounds(150, 400, 100, 30);
+        b_save.setBounds(150, 440, 100, 30);
         b_save.setHorizontalAlignment(SwingConstants.CENTER);
         b_save.setHorizontalTextPosition(SwingConstants.CENTER);
         b_save.addActionListener(this::saveSettings);
@@ -78,7 +76,7 @@ public class SettingsGui extends JFrame {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         getContentPane().setBackground(new Color(26, 26, 26));
         pack();
-        setSize(400, 500);
+        setSize(400, 520);
         App.changeFont(combo, font);
         setLayout(null);
         setVisible(true);
