@@ -43,7 +43,12 @@ public class App extends JFrame {
     private static final String resetPlaylistAfterTimespan = (Storage.getValueByKey("resetPlay", settings));
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
     private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
+
     Font font = MainGui.getCustomFont();
+    // register Font to use it HTML
+    {
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+    }
 
     public JLabel l_nextSong = new JLabel("", SwingConstants.CENTER );
 
@@ -275,9 +280,9 @@ public class App extends JFrame {
                 l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
                         setSongTitle(songs.get(pos)) +
                         "</b><br><br>" +
-                        "-> " + setSongTitle(songs.get(pos+1)) +
+                        "+ " + setSongTitle(songs.get(pos+1)) +
                         "<br>" +
-                        "-> " + setSongTitle(songs.get(pos + 2)) +
+                        "+ " + setSongTitle(songs.get(pos + 2)) +
                         "</body></html>");
             } catch (Exception e) {
                 l_nextSong.setText("Shuffling");
