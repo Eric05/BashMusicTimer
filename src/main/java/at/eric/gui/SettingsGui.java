@@ -9,31 +9,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// UIManager.put("TextField.font", font);
 public class SettingsGui extends JFrame {
 
     private final List<String> settings;
     private final FileOperation fo = new FileOperation("Settings.txt");
-    File font_file = new File("Audiowide-Regular.ttf");
-    Font font;
     JLabel l_playlist, l;
     JTextField tf_playlist, tf;
     JButton b_browse, b_save;
     JComboBox<String> combo = new JComboBox<>();
-
-    {
-        try {
-            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
-            font = thefont.deriveFont(12f);
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-    }
+    Font font = MainGui.getCustomFont();
 
     public SettingsGui() {
         super("Music Player");

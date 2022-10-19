@@ -16,9 +16,8 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class MainGui extends JFrame {
 
     public static String playlist;
-    private final List<String> commands = OsCommands.getOsCommands();
-    File font_file = new File("Audiowide-Regular.ttf");
-    Font font;
+    private final List<String> commands = OsCommands.getOsCommands();   
+    Font font = getCustomFont();
     JLabel l_playlist, l_timer, l_inc;
     JTextField tf_playlist, tf_timer;
     JButton b_playlist, b_timer, b_settings, b_browse, b_stop, b_start;
@@ -30,14 +29,6 @@ public class MainGui extends JFrame {
     private boolean isScreenOff = false;
     private int delay = 1;
 
-    {
-        try {
-            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
-            font = thefont.deriveFont(14f);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public MainGui() {
         super("Music Player");
@@ -350,6 +341,24 @@ public class MainGui extends JFrame {
                 }
             }
         }
+    }
+
+    // UIManager.put("TextField.font", font);
+    public static Font getCustomFont() {
+        var outputArea = new JEditorPane();
+        var font = outputArea.getFont();
+        File font_file = new File("Audiowide-Regular.ttf");
+        if (font_file.exists()) {
+            try {
+                Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
+                font = thefont.deriveFont(14f);
+            } catch (FontFormatException | IOException e) {
+                ErrorLogger.writeError("Error when loading font");
+            }
+        } else {
+            font = font.deriveFont(14f);
+        }
+        return font;
     }
 
     private int parseInt(String str) {

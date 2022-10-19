@@ -1,5 +1,6 @@
 package at.eric.application;
 
+import at.eric.gui.MainGui;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
@@ -23,11 +24,11 @@ import java.util.stream.Stream;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 //todo:
-// skip -> find good timespan
 // create playlist folder in only one location
 // update without having to restart
 // search not only mp3 but array [mp3, wav...]
 // Done:
+// skip -> find good timespan
 // start new song without loading complete gui
 // bool for shuffle mode
 // css design
@@ -42,18 +43,8 @@ public class App extends JFrame {
     private static final String resetPlaylistAfterTimespan = (Storage.getValueByKey("resetPlay", settings));
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
     private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
+    Font font = MainGui.getCustomFont();
 
-    File font_file = new File("Audiowide-Regular.ttf");
-    Font font;
-    {
-        try {
-            Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
-            font = thefont.deriveFont(14f);
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-    }
     public JLabel l_nextSong = new JLabel("", SwingConstants.CENTER );
 
     public App() {
@@ -265,8 +256,8 @@ public class App extends JFrame {
         contentPane.add(controlsPane, BorderLayout.SOUTH);
         playButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().play());
         pauseButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().pause());
-        rewindButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(-14000));
-        skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(180000));
+        rewindButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(-80000));
+        skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(80000));
         changeFont(contentPane, font);
         printInfo();
         this.setContentPane(contentPane);
