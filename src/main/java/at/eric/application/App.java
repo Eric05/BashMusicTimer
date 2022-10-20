@@ -43,6 +43,7 @@ public class App extends JFrame {
     private static final String resetPlaylistAfterTimespan = (Storage.getValueByKey("resetPlay", settings));
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
     private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
+    JButton b_reset = new JButton();
 
     Font font = MainGui.getCustomFont();
     // register Font to use it HTML
@@ -226,17 +227,19 @@ public class App extends JFrame {
                 super.playing(mediaPlayer);
                 System.out.println("Media Playback finished.");
                 setPos(pos);
+                b_reset.setText(pos + "/" + list.size());
                 setContentPane(songs.get(pos));
                 printInfo();
             }
         };
         JPanel contentPane = new JPanel();
-        JButton b_reset = new JButton("<>");
+        b_reset.setText(pos + "/" + list.size());
         b_reset.setBorderPainted(false);
         b_reset.setOpaque(true);
+        b_reset.setFont(new Font(font.getName(), font.getStyle(), font.getSize() - 12));
         b_reset.setBackground(new Color(26,26,26));
         b_reset.setForeground(Color.white);
-        b_reset.setBounds(2, 117, 50, 20);
+        b_reset.setBounds(2, 117, 120, 20);
         b_reset.addActionListener(this::resetFile);
         b_reset.setToolTipText("Reset Playlist");
         l_nextSong.setForeground(Color.white);
@@ -309,8 +312,6 @@ public class App extends JFrame {
         mediaPlayerComponent.mediaPlayer().media().start(path);
     }
 
-
     private static List<String> songs = getMp3Files(list);
-
 
 }
