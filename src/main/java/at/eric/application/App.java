@@ -180,9 +180,15 @@ public class App extends JFrame {
     }    private static int pos;
 
     static {
-       if (list != null) {
-           pos = Integer.parseInt(list.get(list.size() - 1));
+       if (list != null && list.size() > 0) {
+          try {
+              pos = Integer.parseInt(list.get(list.size() - 1));
+          } catch (Exception e){
+              initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
+          }
+
        } else {
+           initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
            ErrorLogger.writeError("NullExceptionError while reading playlist");
        }
     }
