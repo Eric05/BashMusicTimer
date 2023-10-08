@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 //todo:
+// BUGFIX - bug getList in App 76/100/183
 // create playlist folder in only one location
 // update without having to restart
 // search not only mp3 but array [mp3, wav...]
