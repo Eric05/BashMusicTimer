@@ -243,7 +243,7 @@ public class App extends JFrame {
             }
         };
         JPanel contentPane = new JPanel();
-        b_reset.setText(pos + "/" + list.size());
+        b_reset.setText((pos +1)  + "/" + (list.size() -1));
         b_reset.setBorderPainted(false);
         b_reset.setOpaque(true);
         b_reset.setFont(new Font(font.getName(), font.getStyle(), font.getSize() - 12));
