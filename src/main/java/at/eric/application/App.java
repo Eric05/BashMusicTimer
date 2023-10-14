@@ -25,6 +25,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 //todo:
 // BUGFIX - bug getList in App 76/100/183
+// skip and rewind
 // create playlist folder in only one location
 // update without having to restart
 // search not only mp3 but array [mp3, wav...]
@@ -205,6 +206,8 @@ public class App extends JFrame {
             System.out.println("End of playlist. Shuffling");
             pos = 0;
             initFile(VIDEO_PATH + File.separator + "playlist.txt", pos);
+        } else if(pos < 0){
+            pos = 0;
         }
         App.pos = pos;
     }
@@ -271,13 +274,30 @@ public class App extends JFrame {
         contentPane.add(controlsPane, BorderLayout.SOUTH);
         playButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().play());
         pauseButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().pause());
-        rewindButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(-80000));
-        skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(80000));
+        rewindButton.addActionListener(e -> goTitleBack());
+        //skipButton.addActionListener(e -> mediaPlayerComponent.mediaPlayer().controls().skipTime(80000));
+        skipButton.addActionListener(e -> skipTitle());
         changeFont(contentPane, font);
         printInfo();
         this.setContentPane(contentPane);
         this.setVisible(true);
         this.loadVideo(path);
+    }
+
+    private void skipTitle(){
+        mediaPlayerComponent.mediaPlayer().controls().pause();
+        setPos(pos);
+        b_reset.setText(pos + "/" + list.size());
+        setContentPane(songs.get(pos));
+        printInfo();
+    }
+
+    private void goTitleBack(){
+        mediaPlayerComponent.mediaPlayer().controls().pause();
+        setPos(pos-2);
+        b_reset.setText(pos + "/" + list.size());
+        setContentPane(songs.get(pos));
+        printInfo();
     }
 
     private void resetFile(ActionEvent actionEvent) {
