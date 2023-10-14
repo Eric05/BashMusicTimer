@@ -317,9 +317,30 @@ public class App extends JFrame {
             } catch (Exception e) {
                 l_nextSong.setText("Shuffling");
             }
-        } else {
+        } else if (songs.size()-1 > pos) {
+            try {
+            l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
+                    setSongTitle(songs.get(pos)) +
+                    "</b><br><br>" +
+                    "+ " + setSongTitle(songs.get(pos+1)) +
+                    "<br>" +
+                    "</body></html>");
+        } catch (Exception e) {
             l_nextSong.setText("Shuffling");
         }
+
+    } else if (songs.size() > pos) {
+        try {
+            l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
+                    setSongTitle(songs.get(pos)) +
+                    "</b><br><br>" +
+                    "+  Shuffling" +
+                    "<br>" +
+                    "</body></html>");
+        } catch (Exception e) {
+            l_nextSong.setText("Shuffling");
+        }
+    }
 
     }
 
