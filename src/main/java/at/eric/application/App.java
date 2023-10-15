@@ -285,7 +285,7 @@ public class App extends JFrame {
     }
 
     private void skipTitle(){
-        mediaPlayerComponent.mediaPlayer().controls().pause();
+        mediaPlayerComponent.mediaPlayer().controls().stop();
         setPos(pos);
         b_reset.setText(pos + "/" + list.size());
         setContentPane(songs.get(pos));
@@ -293,7 +293,7 @@ public class App extends JFrame {
     }
 
     private void goTitleBack(){
-        mediaPlayerComponent.mediaPlayer().controls().pause();
+        mediaPlayerComponent.mediaPlayer().controls().stop();
         setPos(pos-2);
         b_reset.setText(pos + "/" + list.size());
         setContentPane(songs.get(pos));
