@@ -34,6 +34,25 @@ public class MainGui extends JFrame {
     public MainGui() {
         super("Music Player");
 
+        if (parseInt(Storage.getValueByKey("lookFeel", settings)) > 0) {
+            try {
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                // cross-platform
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception ex) {
+
+                }
+            }
+        }
+
+
         UIManager.put("Label.font", font);
         if (!Storage.getValueByKey("batteryLimit", settings).isBlank() &&
                 parseInt(Storage.getValueByKey("batteryLimit", settings)) > 0) {
