@@ -21,6 +21,7 @@ public class MainGui extends JFrame {
     JLabel l_playlist, l_timer, l_inc;
     JTextField tf_playlist, tf_timer;
     JButton b_playlist, b_timer, b_settings, b_browse, b_stop, b_start;
+    String currentWorkingDir = FileOperation.getCurrentWorkingDir();
     private List<String> settings = new FileOperation("Settings.txt").getSettings();
     private int time;
     private String root;
@@ -71,7 +72,6 @@ public class MainGui extends JFrame {
     }
 
     public void createGui() {
-        String currentWorkingDir = FileOperation.getCurrentWorkingDir();
         var pathToPicture = new File(currentWorkingDir + File.separator + "mic.jpg");
         if (pathToPicture.exists()) {
             try {
@@ -347,7 +347,8 @@ public class MainGui extends JFrame {
     public static Font getCustomFont() {
         var outputArea = new JEditorPane();
         var font = outputArea.getFont();
-        File font_file = new File("Audiowide-Regular.ttf");
+        String currentWorkingDir = FileOperation.getCurrentWorkingDir();
+        File font_file = new File(currentWorkingDir + File.separator +"Audiowide-Regular.ttf");
         if (font_file.exists()) {
             try {
                 Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);

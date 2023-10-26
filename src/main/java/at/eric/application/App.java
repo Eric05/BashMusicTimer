@@ -37,6 +37,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 // use font
 
 public class App extends JFrame {
+
     @Serial
     private static final long serialVersionUID = 1L;
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
@@ -310,9 +311,9 @@ public class App extends JFrame {
                 l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
                         setSongTitle(songs.get(pos)) +
                         "</b><br><br>" +
-                        "+ " + setSongTitle(songs.get(pos+1)) +
+                         setSongTitle(songs.get(pos+1)) +
                         "<br>" +
-                        "+ " + setSongTitle(songs.get(pos + 2)) +
+                        setSongTitle(songs.get(pos + 2)) +
                         "</body></html>");
             } catch (Exception e) {
                 l_nextSong.setText("Shuffling");
