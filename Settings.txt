@@ -10,4 +10,5 @@ mode;off
 bluetooth; echo 'hi'
 shuffle;
 resetPlay;18
+lookFeel;1
 playlist;C:\Users\user\Desktop\Musik
