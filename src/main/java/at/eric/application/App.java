@@ -37,6 +37,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 // use font
 
 public class App extends JFrame {
+
     @Serial
     private static final long serialVersionUID = 1L;
     private static List<String> settings = new FileOperation("Settings.txt").getSettings();
@@ -46,7 +47,7 @@ public class App extends JFrame {
     private static EmbeddedMediaPlayerComponent mediaPlayerComponent = null;
     private static final String appTitle = "Radio " + new File(VIDEO_PATH).getName();
     JButton b_reset = new JButton();
-
+    private static boolean isFirstBack = true;
     Font font = MainGui.getCustomFont();
     // register Font to use it HTML
     {
@@ -75,7 +76,11 @@ public class App extends JFrame {
     public static void main() {
         settings = new FileOperation("Settings.txt").getSettings();
         VIDEO_PATH = Storage.getValueByKey("playlist", settings);
-        list = getFiles();
+        try {
+            list = getFiles();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (list != null) {
             songs = getMp3Files(list);
             pos = Integer.parseInt(list.get(list.size() - 1));
@@ -88,7 +93,13 @@ public class App extends JFrame {
         } catch (Exception e) {
             System.out.println("error " + e);
         }
-        songGui(songs.get(pos));
+        if (songs != null && songs.size() > 0) {
+                try {
+                songGui(songs.get(pos));
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void songGui(String path) {
@@ -102,10 +113,17 @@ public class App extends JFrame {
     private static List<String> list = getFiles();
 
     private static List<String> getMp3Files(List<String> list) {
-        List<String> files;
-        files = list.stream()
-                .filter(path -> path.endsWith(".mp3"))
-                .collect(Collectors.toList());
+        List<String> files = null;
+        if( list == null || list.isEmpty()){
+            return files;
+        }
+        try {
+            files = list.stream()
+                    .filter(path -> path.endsWith(".mp3"))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return files;
     }
 
@@ -201,6 +219,19 @@ public class App extends JFrame {
     }
 
     public static void setPos(int pos) {
+        isFirstBack = true;
+        pos++;
+        if (pos >= songs.size()) {
+            System.out.println("End of playlist. Shuffling");
+            pos = 0;
+            initFile(VIDEO_PATH + File.separator + "playlist.txt", pos);
+        } else if(pos < 0){
+            pos = 0;
+        }
+        App.pos = pos;
+    }
+
+    public static void setPos(int pos, int i) {
         pos++;
         if (pos >= songs.size()) {
             System.out.println("End of playlist. Shuffling");
@@ -294,7 +325,12 @@ public class App extends JFrame {
 
     private void goTitleBack(){
         mediaPlayerComponent.mediaPlayer().controls().stop();
-        setPos(pos-2);
+        if(isFirstBack){
+            setPos(pos-1,1);
+            isFirstBack = false;
+        } else {
+            setPos(pos - 2,1);
+        }
         b_reset.setText(pos + "/" + list.size());
         setContentPane(songs.get(pos));
         printInfo();
@@ -310,9 +346,9 @@ public class App extends JFrame {
                 l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
                         setSongTitle(songs.get(pos)) +
                         "</b><br><br>" +
-                        "+ " + setSongTitle(songs.get(pos+1)) +
+                         setSongTitle(songs.get(pos+1)) +
                         "<br>" +
-                        "+ " + setSongTitle(songs.get(pos + 2)) +
+                        setSongTitle(songs.get(pos + 2)) +
                         "</body></html>");
             } catch (Exception e) {
                 l_nextSong.setText("Shuffling");

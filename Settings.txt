@@ -6,7 +6,7 @@ warnReps;2
 screenOffDelay;
 browser;firefox
 batteryLimit;15
-mode;shuffle
+mode;off
 bluetooth; echo 'hi'
 shuffle;
 resetPlay;18

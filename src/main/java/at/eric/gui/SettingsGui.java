@@ -69,11 +69,17 @@ public class SettingsGui extends JFrame {
         setVisible(true);
     }
 
-    private void createTable() {
+    private void createTable( int ... maxRows) {
+        int counter = 0;
         String key;
         String val;
+        int rows = 0;
         int posY = 80;
+        if(maxRows.length <= 0){
+           rows = 8;
+        }
         for (String setting : settings) {
+           counter++;
             if (setting.length() < 3) {
                 continue;
             }
@@ -101,7 +107,11 @@ public class SettingsGui extends JFrame {
             l.setForeground(Color.white);
             add(l);
             add(tf);
-            posY += 30;
+            if ( counter < rows ){
+                posY+= 30;
+            } else {
+                posY += 15;
+            }
         }
     }
 

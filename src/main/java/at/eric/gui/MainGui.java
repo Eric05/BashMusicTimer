@@ -21,6 +21,7 @@ public class MainGui extends JFrame {
     JLabel l_playlist, l_timer, l_inc;
     JTextField tf_playlist, tf_timer;
     JButton b_playlist, b_timer, b_settings, b_browse, b_stop, b_start;
+    String currentWorkingDir = FileOperation.getCurrentWorkingDir();
     private List<String> settings = new FileOperation("Settings.txt").getSettings();
     private int time;
     private String root;
@@ -32,6 +33,25 @@ public class MainGui extends JFrame {
 
     public MainGui() {
         super("Music Player");
+
+        if (parseInt(Storage.getValueByKey("lookFeel", settings)) > 0) {
+            try {
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                // cross-platform
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception ex) {
+
+                }
+            }
+        }
+
 
         UIManager.put("Label.font", font);
         if (!Storage.getValueByKey("batteryLimit", settings).isBlank() &&
@@ -71,7 +91,6 @@ public class MainGui extends JFrame {
     }
 
     public void createGui() {
-        String currentWorkingDir = FileOperation.getCurrentWorkingDir();
         var pathToPicture = new File(currentWorkingDir + File.separator + "mic.jpg");
         if (pathToPicture.exists()) {
             try {
@@ -87,6 +106,10 @@ public class MainGui extends JFrame {
             }
         } else {
             getContentPane().setBackground(new Color(26, 26, 26));
+        }
+        try {
+            setIconImage(Toolkit.getDefaultToolkit().getImage(currentWorkingDir + File.separator +"icon.png"));
+        } catch (Exception e) {
         }
 
         l_playlist = new JLabel("PLAYLIST:");
@@ -132,7 +155,7 @@ public class MainGui extends JFrame {
         b_playlist.setBounds(350, 260, 120, 30);
         b_playlist.addActionListener(this::update);
 
-        b_settings = new JButton("Change");
+        b_settings = new JButton("Settings");
         b_settings.setBounds(230, 260, 120, 30);
         b_settings.addActionListener(this::changeSettings);
 
@@ -161,6 +184,20 @@ public class MainGui extends JFrame {
     }
 
     private void update(ActionEvent actionEvent) {
+        settings = new FileOperation("Settings.txt").getSettings();
+        Thread t = new Thread(this::setMode);
+        Thread t2 = new Thread(this::screenOff);
+        OsCommands.doCommand("mediaOff", "");
+        Sleep.delaySeconds(delay);
+        init();
+        t.start();
+        Sleep.delaySeconds(delay);
+        this.toFront();
+        this.requestFocus();
+        t2.start();
+    }
+
+    private void update() {
         settings = new FileOperation("Settings.txt").getSettings();
         Thread t = new Thread(this::setMode);
         Thread t2 = new Thread(this::screenOff);
@@ -213,7 +250,11 @@ public class MainGui extends JFrame {
         if (mode.startsWith("browse")) {
             OsCommands.doCommand(Storage.getValueByKey("browser", settings));
         } else if (mode.startsWith("shuffle")) {
-            App.main();
+            try {
+                App.main();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             String path = Storage.getValueByKey("playlist", settings);
             File f = new File(path);
@@ -295,15 +336,20 @@ public class MainGui extends JFrame {
     }
 
     public void changePlaylist(ActionEvent e) {
+        String FILE_PATH;
         var fd = new FileDialog().getFileName(root);
         if (fd != null) {
-            Thread t = new Thread(this::screenOff);
-            setPlaylist(String.valueOf(fd));
-            OsCommands.doCommand("mediaOff", "");
-            Sleep.delaySeconds(delay);
-            OsCommands.doCommand("mediaOn", playlist);
-            t.start();
+            for (int i = 0; i < settings.size(); i++) {
+                if (settings.get(i).startsWith("playlist")) {
+                    FILE_PATH = "playlist;" + fd;
+                    settings.set(i, FILE_PATH);
+                    break;
+                }
+            }
+            FileOperation fo = new FileOperation("Settings.txt");
+            fo.writeSettings(settings);
         }
+        update();
     }
 
     public void setIncrement(int increment) {
@@ -347,7 +393,8 @@ public class MainGui extends JFrame {
     public static Font getCustomFont() {
         var outputArea = new JEditorPane();
         var font = outputArea.getFont();
-        File font_file = new File("Audiowide-Regular.ttf");
+        String currentWorkingDir = FileOperation.getCurrentWorkingDir();
+        File font_file = new File(currentWorkingDir + File.separator +"Audiowide-Regular.ttf");
         if (font_file.exists()) {
             try {
                 Font thefont = Font.createFont(Font.TRUETYPE_FONT, font_file);
