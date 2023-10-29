@@ -71,6 +71,11 @@ public class App extends JFrame {
                 e.printStackTrace();
             }
                 }));
+        String currentWorkingDir = FileOperation.getCurrentWorkingDir();
+        try {
+            setIconImage(Toolkit.getDefaultToolkit().getImage(currentWorkingDir + File.separator +"icon.png"));
+        } catch (Exception e) {
+        }
     }
 
     public static void main() {
@@ -340,10 +345,12 @@ public class App extends JFrame {
         initFile(VIDEO_PATH + File.separator + "playlist.txt", 0);
     }
 
+
     private void printInfo() {
         if(songs.size()-2 > pos) {
             try {
-                l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
+                l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;" +
+                        "max-width:500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;\\\"> <b><br>" +
                         setSongTitle(songs.get(pos)) +
                         "</b><br><br>" +
                          setSongTitle(songs.get(pos+1)) +
@@ -355,10 +362,10 @@ public class App extends JFrame {
             }
         } else if (songs.size()-1 > pos) {
             try {
-            l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
+            l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;max-width:500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;\\\"> <b><br>" +
                     setSongTitle(songs.get(pos)) +
                     "</b><br><br>" +
-                    "+ " + setSongTitle(songs.get(pos+1)) +
+                    "" + setSongTitle(songs.get(pos+1)) +
                     "<br>" +
                     "</body></html>");
         } catch (Exception e) {
@@ -367,10 +374,10 @@ public class App extends JFrame {
 
     } else if (songs.size() > pos) {
         try {
-            l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;\\\"> <b><br>" +
+            l_nextSong.setText("<html><body style=\\\"padding-left:10px;margin-bottom:20px;max-width:500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;\\\"> <b><br>" +
                     setSongTitle(songs.get(pos)) +
                     "</b><br><br>" +
-                    "+  Shuffling" +
+                    "Shuffling Playlist" +
                     "<br>" +
                     "</body></html>");
         } catch (Exception e) {
